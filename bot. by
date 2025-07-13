@@ -1,0 +1,35 @@
+from telegram import Update
+from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ContextTypes
+import random
+
+responses = [
+    "هاااااجر يا ملكة، إيه الكلام ده؟ 😂👌🏻",
+    "أنا مش بوت يا ست الكل... أنا سانفور ابن هاجر 🦋😉",
+    "جملتك دي محتاجة شوية شطة يا حبيبة! 🔥🤌🏻",
+    "صححتلك الكلام، بس المرة الجاية هاجلدك لو غلطت! 🔪😈",
+    "بص يا هاجر، انتِ دمك تقيل والرد بتاعي أثقل! 💥🦾"
+]
+
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("أنا مش بوت يا ست الكل... أنا سانفور ابن هاجر 🦋😉")
+
+async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    text = update.message.text
+
+    if "يا بوت" in text:
+        reply = "أنا مش بوت يا راس التوت 🫐😤"
+    elif "صححلي" in text:
+        reply = "تم التصحيح! بس أنتِ الأصل صحّاحة بطبعك 😝"
+    else:
+        reply = random.choice(responses)
+
+    await update.message.reply_text(reply)
+
+if __name__ == '__main__':
+    app = ApplicationBuilder().token(8095838968:AAHwh7v8Rw-jMTE4RCIl-gPKh1AWg2a6IFk).build()
+
+    app.add_handler(CommandHandler("start", start))
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
+
+    print("سانفور 2.0 جاهز للمهمة!")
+    app.run_polling()
